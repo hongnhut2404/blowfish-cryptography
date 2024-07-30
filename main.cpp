@@ -2,15 +2,12 @@
 
 int main()
 {
-    string key = "aabb09182736ccdd";
-    Blowfish blowfish(key);
+    string password = "hellowor"; //pass
+    string salt = generateRandomSalt(16 - password.length());
+    cout << salt << endl;
+    string hash = generateHash(password, salt);
 
-    string plaintext = "123456abcd132536";
-    string encrypted = blowfish.encrypt(plaintext);
-
-    cout << "Encrypted: " << encrypted << endl;
-    // string decrypted = blowfish.decrypt(encrypted);
-    // cout << "Decrypted: " << decrypted << endl;
+    cout << "Encrypted: " << hash << endl;
 
     return 0;
 }

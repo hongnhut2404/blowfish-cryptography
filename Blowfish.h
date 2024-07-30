@@ -4,9 +4,12 @@
 #include <iomanip>
 #include <bitset>
 #include <sstream>
+#include <random>
 using namespace std;
 
 string stringToHex(const string &str);
+string generateRandomSalt(size_t length);
+string generateHash(const string &password, const string &salt);
 
 class Blowfish
 {

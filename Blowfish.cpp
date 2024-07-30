@@ -10,6 +10,31 @@ string stringToHex(const string &str)
     return oss.str();
 }
 
+string generateRandomSalt(size_t length) {
+    const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    random_device rd;
+    mt19937 generator(rd());
+
+    uniform_int_distribution<> distribution(0, characters.size() - 1);
+
+    // Generate the salt
+    string salt;
+    for (size_t i = 0; i < length; ++i) {
+        salt += characters[distribution(generator)];
+    }
+
+    return salt;
+}
+
+string generateHash(const string &password, const string &salt)
+{
+    string combine = password + salt;
+    string combineHex = stringToHex(combine);
+    Blowfish bf(combineHex);
+    return bf.encrypt(stringToHex(password));
+}
+
 void Blowfish::initialize()
 {
     P = P_init;

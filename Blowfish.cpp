@@ -27,6 +27,48 @@ string generateRandomSalt(size_t length) {
     return salt;
 }
 
+string generateSalt(size_t length) {
+    // Characters that can be used in the salt
+    const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    // Random device and generator
+    random_device rd;
+    mt19937 generator(rd());
+
+    // Distribution for generating random indices
+    uniform_int_distribution<> distribution(0, characters.size() - 1);
+
+    // Get the current time since epoch in milliseconds
+    auto now = chrono::system_clock::now();
+    auto epoch = now.time_since_epoch();
+    auto milliseconds = chrono::duration_cast<chrono::milliseconds>(epoch).count();
+
+    // Convert the time to a string
+    stringstream timeStream;
+    timeStream << milliseconds;
+
+    // Generate the random part of the salt
+    string randomPart;
+    for (size_t i = 0; i < length - timeStream.str().size(); ++i) {
+        randomPart += characters[distribution(generator)];
+    }
+
+    // Combine the time-based part and the random part
+    string salt = timeStream.str() + randomPart;
+    
+    // If the salt is still shorter than the required length, append more random characters
+    while (salt.size() < length) {
+        salt += characters[distribution(generator)];
+    }
+
+    // Trim the salt to the desired length if necessary
+    if (salt.size() > length) {
+        salt = salt.substr(0, length);
+    }
+
+    return salt;
+}
+
 string generateHash(const string &password, const string &salt)
 {
     string combine = password + salt;

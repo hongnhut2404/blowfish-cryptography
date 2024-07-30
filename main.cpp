@@ -2,9 +2,9 @@
 
 int main()
 {
-    string password = "hellowor"; //pass
-    string salt = generateRandomSalt(16 - password.length());
-    cout << salt << endl;
+    string password = "123456789123"; //pass
+    string salt = generateSalt(16);
+    cout << "Salt: " << salt << endl;
     string hash = generateHash(password, salt);
 
     cout << "Encrypted: " << hash << endl;
